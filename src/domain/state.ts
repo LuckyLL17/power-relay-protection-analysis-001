@@ -6,4 +6,9 @@ export const devices: ProtectionDevice[] = [{ id: 'R-A1', name: 'L-AB 北郊侧�
 export const settingSnapshots: any[] = [{ id: 'set-2026.09', effectiveAt: '2026-09-01T00:00:00.000Z', author: 'protection-engineering', reason: '季节运行方式调整', checksum: 'sha256:relay-202609' }];
 export const recordings: Recording[] = []; export const events: FaultEvent[] = []; export const analyses: any[] = []; export const topologyChanges: any[] = []; export const maintenanceTests: any[] = []; export const audits: AuditEntry[] = [];
 export const now = () => new Date().toISOString();
-export function log(action: string, entity: string, payload: any) { audits.push({ id: newId(), time: now(), action, entity, payload }); }
+// 审计是只追加的历史记录：写入时对 payload 做深快照，
+// 之后领域对象（分析、故障事件等）的状态变化不得改写已落库的历史 payload。
+export function log(action: string, entity: string, payload: any) {
+  const snapshot = payload === undefined ? payload : structuredClone(payload);
+  audits.push({ id: newId(), time: now(), action, entity, payload: snapshot });
+}
