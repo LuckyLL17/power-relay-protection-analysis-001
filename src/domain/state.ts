@@ -1,4 +1,4 @@
-import type { AuditEntry, Breaker, FaultEvent, ProtectionDevice, Recording } from './types.js';
+import { newId } from '../core/id.js'; import type { AuditEntry, Breaker, FaultEvent, ProtectionDevice, Recording } from './types.js';
 export const substations = [{ id: 'SS-A', name: '北郊变电站', voltageKv: 220 }, { id: 'SS-B', name: '东城变电站', voltageKv: 220 }, { id: 'SS-C', name: '工业园变电站', voltageKv: 110 }];
 export const lines = [{ id: 'L-AB', from: 'SS-A', to: 'SS-B', lengthKm: 42.6, positiveSequenceOhmPerKm: .19, zeroSequenceOhmPerKm: .58, status: 'energized' }, { id: 'L-BC', from: 'SS-B', to: 'SS-C', lengthKm: 18.4, positiveSequenceOhmPerKm: .24, zeroSequenceOhmPerKm: .71, status: 'energized' }];
 export const breakers: Breaker[] = [{ id: 'BR-A1', name: '北郊侧断路器', substation: 'SS-A', state: 'closed' }, { id: 'BR-B1', name: '东城侧断路器', substation: 'SS-B', state: 'closed' }, { id: 'BR-C1', name: '工业园侧断路器', substation: 'SS-C', state: 'closed' }];
@@ -6,4 +6,4 @@ export const devices: ProtectionDevice[] = [{ id: 'R-A1', name: 'L-AB 北郊侧�
 export const settingSnapshots: any[] = [{ id: 'set-2026.09', effectiveAt: '2026-09-01T00:00:00.000Z', author: 'protection-engineering', reason: '季节运行方式调整', checksum: 'sha256:relay-202609' }];
 export const recordings: Recording[] = []; export const events: FaultEvent[] = []; export const analyses: any[] = []; export const topologyChanges: any[] = []; export const maintenanceTests: any[] = []; export const audits: AuditEntry[] = [];
 export const now = () => new Date().toISOString();
-export function log(action: string, entity: string, payload: any) { audits.push({ id: crypto.randomUUID(), time: now(), action, entity, payload }); }
+export function log(action: string, entity: string, payload: any) { audits.push({ id: newId(), time: now(), action, entity, payload }); }
