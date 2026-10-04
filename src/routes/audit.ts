@@ -1,0 +1,1 @@
+import type { FastifyInstance } from 'fastify'; import { audits } from '../domain/state.js'; export async function registerAuditRoutes(app: FastifyInstance) { app.get('/api/audit', async () => audits.slice(-200)); }
